@@ -30,8 +30,10 @@ static const xmlChar* PyXmlSec_GetCryptoLibName() {
 #if XMLSEC_VERSION_HEX > 308
     // xmlSecGetDefaultCrypto was introduced in version 1.2.21
     const xmlChar* cryptoLib = xmlSecGetDefaultCrypto();
+    printf("1cryptoLib: %s \n", cryptoLib);
 #else
     const xmlChar* cryptoLib = (const xmlChar*) XMLSEC_CRYPTO;
+    printf("2cryptoLib: %s \n", cryptoLib);
 #endif
     PYXMLSEC_DEBUGF("dynamic crypto library: %s", cryptoLib);
     return cryptoLib;
@@ -68,7 +70,7 @@ static int PyXmlSec_Init(void) {
 
 #ifndef XMLSEC_NO_CRYPTO_DYNAMIC_LOADING
     if (xmlSecCryptoDLLoadLibrary(PyXmlSec_GetCryptoLibName()) < 0) {
-        PyXmlSec_SetLastError("cannot load crypto library for xmlsec.");
+        PyXmlSec_SetLastError("cannot load crypto library for xmlsec : %s \n", PyXmlSec_GetCryptoLibName());
         PyXmlSec_Free(_PYXMLSEC_FREE_XMLSEC);
         return -1;
     }
